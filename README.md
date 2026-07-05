@@ -97,17 +97,30 @@ drop image ──▶ Web Worker (comlink RPC)
 
 Two BiRefNet_lite graphs ship with the app, picked at runtime:
 
-| Tier | Input | Needs | Who gets it |
+| Tier | Input | Needs | Status today |
 | --- | --- | --- | --- |
-| **1024 HD** | 1024 px | `maxStorageBuffersPerShaderStage ≥ 11` | Chrome 146+ on Windows / Linux |
-| **512 Fast** | 512 px | any WebGPU adapter | macOS (Metal caps the limit at 10), older Chrome, Safari |
+| **1024 HD** | 1024 px | `maxStorageBuffersPerShaderStage ≥ 11` **and** enough WASM headroom | aspirational — see below |
+| **512 Fast** | 512 px | any WebGPU adapter | what everyone actually gets |
 
-This is a browser limitation, not a hardware one — even an M-series Mac falls back
-to 512 because Chrome's Metal backend currently exposes at most 10 storage buffers
-per shader stage. The guided-filter refinement always runs at the **original**
-resolution, so edge quality stays high on both tiers. If the 1024 graph fails at
-inference time (e.g. Safari OOM), the worker disposes it and retries on 512
-automatically. Open `/gpu-check.html` on the deployed site to see your adapter's verdict.
+The 1024 graph currently hits **two** independent walls in browsers:
+
+1. **Storage-buffer limit** — the graph contains giant `Concat` (up to 1024 inputs)
+   and `Split` (32 outputs) nodes; one shader needs 11 storage buffers, and Chrome's
+   Metal backend exposes only 10. `scripts/patch-onnx-webgpu.py` rewrites those nodes
+   into trees of ≤ 8 (verified bit-exact against the original), which clears this wall.
+2. **WASM memory wall** — the model's deformable-conv sampling ops
+   (`ScatterND` / `GatherND`) aren't implemented in onnxruntime's WebGPU EP yet, so
+   they bridge back to CPU WASM. At 1024² those intermediates exhaust the 32-bit WASM
+   heap (`std::bad_alloc`) — even in Safari, whose adapter reports 44 storage buffers.
+   512² fits fine.
+
+So until onnxruntime-web gains WebGPU kernels for those ops, every browser runs the
+512 tier. In practice the gap is small: the guided-filter refinement always runs at
+the **original** resolution, so edge quality stays high. If a 1024 attempt fails at
+inference time, the worker disposes it and retries on 512 automatically. Open
+`/gpu-check.html` on the deployed site to inspect your adapter. (Native runtimes have
+no such caps — the same 1024 graph runs in ~3 s on an M-series CPU via
+onnxruntime-node, which is the route a future desktop build would take.)
 
 ### Stack
 
