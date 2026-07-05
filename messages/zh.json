@@ -1,0 +1,187 @@
+{
+  "common": {
+    "appName": "LumiPic",
+    "tagline": "每一个像素都留在你的设备上"
+  },
+  "hero": {
+    "titleA": "图片工具，",
+    "titleB": "无需上传",
+    "subtitle": "AI 抠图、智能压缩、格式转换、精准裁剪——全部在浏览器里完成，照片永远不会离开你的设备。"
+  },
+  "tools": {
+    "remove-bg": {
+      "name": "抠图去背景",
+      "desc": "端侧 AI 输出发丝级边缘的透明 PNG，效果媲美专业修图。"
+    },
+    "compress": {
+      "name": "智能压缩",
+      "desc": "JPG、PNG、WebP、AVIF 体积大幅缩小，肉眼几乎无损。"
+    },
+    "convert": {
+      "name": "格式转换",
+      "desc": "PNG、JPG、WebP、AVIF 互转，支持 iPhone HEIC 照片。"
+    },
+    "crop": {
+      "name": "裁剪",
+      "desc": "矩形框选精准裁剪，支持旋转，保存为原格式。"
+    },
+    "strip-exif": {
+      "name": "清除 EXIF",
+      "desc": "无损去除 GPS 定位与相机信息，画质零损失。"
+    }
+  },
+  "studio": {
+    "dropTitle": "把图片拖到这里",
+    "dropOr": "或",
+    "browse": "选择文件",
+    "pasteHint": "也可以直接粘贴剪贴板图片（⌘V）",
+    "dropOverlay": "松手即可添加",
+    "supported": "JPG · PNG · WebP · AVIF · HEIC · GIF · BMP",
+    "limits": "最多 60 张 · 单张 80 MB",
+    "addMore": "继续添加",
+    "clearAll": "清空",
+    "downloadAll": "全部下载",
+    "downloadZip": "打包下载 ZIP",
+    "startAll": "开始处理 {count} 张",
+    "download": "下载",
+    "remove": "移除",
+    "processing": "处理中…",
+    "processingCount": "正在处理第 {done} / {total} 张",
+    "processingHint": "请稍候，处理期间请不要关闭页面",
+    "queued": "排队中",
+    "done": "完成",
+    "failed": "失败",
+    "saved": "已节省",
+    "larger": "变大",
+    "compare": "对比",
+    "before": "处理前",
+    "after": "处理后",
+    "filesCount": "{count} 张图片",
+    "doneCount": "已完成 {done} / {total}",
+    "rejectedNote": "{count} 个文件被跳过（格式不支持或超过 80 MB）",
+    "errorGeneric": "这张图片处理失败",
+    "errorUnsupportedLossless": "无损清除仅支持 JPG、PNG、WebP",
+    "errorEngine": "当前设备无法运行 AI 引擎"
+  },
+  "settings": {
+    "quality": "质量",
+    "strength": "压缩力度",
+    "format": "输出格式",
+    "pngLossy": "PNG 智能有损",
+    "pngLossyHint": "调色板量化，原理同 TinyPNG"
+  },
+  "crop": {
+    "free": "自由",
+    "rotate": "旋转",
+    "flip": "翻转",
+    "apply": "裁剪",
+    "recrop": "重新裁剪"
+  },
+  "engine": {
+    "loadingTitle": "正在加载 AI 模型",
+    "loadingDesc": "首次使用需下载模型，之后永久缓存、下次秒开",
+    "ready": "端侧 AI 就绪 · WebGPU",
+    "tierHd": "1024 高清版",
+    "tierLite": "512 快速版",
+    "tierLiteHint": "此浏览器的 WebGPU 无法稳定运行 1024 版，已自动切换。边缘精修仍按原图分辨率处理",
+    "unavailableTitle": "当前浏览器无法本地运行 AI",
+    "unavailableDesc": "未检测到 WebGPU。请使用最新版 Chrome、Edge 或 Safari。"
+  },
+  "landing": {
+    "ctaPrimary": "立即抠图",
+    "ctaSecondary": "看看能做什么",
+    "sections": {
+      "remove-bg": {
+        "eyebrow": "01 · 抠图去背景",
+        "title": "一拖一放，背景消失",
+        "desc": "BiRefNet 端侧 AI 模型直接在你的浏览器里运行。发丝、绒毛、半透明边缘都能干净分离，输出即用的透明 PNG。",
+        "b1": "发丝级边缘，导向滤波精修",
+        "b2": "WebGPU 加速，一张图只要几秒",
+        "b3": "1024 高清模型自适应加载",
+        "cta": "试试抠图"
+      },
+      "compress": {
+        "eyebrow": "02 · 智能压缩",
+        "title": "体积砍掉八成，画质几乎无损",
+        "desc": "MozJPEG、OxiPNG、WebP、AVIF 编码器编译成 WASM 在本地运行。拖动一根滑杆，实时权衡体积与画质。",
+        "b1": "JPG / PNG / WebP / AVIF 全支持",
+        "b2": "批量处理，一次拖入几十张",
+        "b3": "实时显示节省了多少",
+        "cta": "试试压缩"
+      },
+      "convert": {
+        "eyebrow": "03 · 格式转换",
+        "title": "HEIC 到 AVIF，一步到位",
+        "desc": "iPhone 拍的 HEIC、古老的 BMP，统统转成网页友好的现代格式。尺寸与色彩原样保留。",
+        "b1": "支持 HEIC / GIF / BMP 输入",
+        "b2": "输出 PNG / JPG / WebP / AVIF",
+        "b3": "质量可调，转换即压缩",
+        "cta": "试试转换"
+      },
+      "crop": {
+        "eyebrow": "04 · 精准裁剪",
+        "title": "框哪儿裁哪儿，格式不变",
+        "desc": "自由框选或按比例预设，支持旋转与翻转。裁剪后保留原始格式——PNG 进，PNG 出。",
+        "b1": "自由框选 + 比例预设",
+        "b2": "旋转 / 翻转纠正方向",
+        "b3": "保留原始格式与画质",
+        "cta": "试试裁剪"
+      },
+      "strip-exif": {
+        "eyebrow": "05 · 清除 EXIF",
+        "title": "分享照片，不分享行踪",
+        "desc": "GPS 坐标、拍摄时间、设备型号……一键抹掉照片里的所有元数据，只留下画面本身。",
+        "b1": "清除 GPS / 时间 / 设备信息",
+        "b2": "画质零损失",
+        "b3": "支持批量清理",
+        "cta": "试试清除"
+      }
+    },
+    "privacy": {
+      "eyebrow": "为什么是 LumiPic",
+      "title": "你的照片，从不离开你的设备",
+      "desc": "没有上传、没有服务器、没有账号。所有计算都发生在你自己的浏览器里——这不是承诺，是技术架构。",
+      "s1": "0",
+      "s1l": "次上传，图片不经过任何服务器",
+      "s2": "100%",
+      "s2l": "本地计算，断网也能用",
+      "s3": "¥0",
+      "s3l": "永久免费，无水印无限制"
+    },
+    "final": {
+      "title": "把图片拖进来试试",
+      "sub": "免费、无登录、无水印。打开就能用。",
+      "cta": "开始使用"
+    }
+  },
+  "footer": {
+    "privacy": "你的图片永远不会离开你的设备。",
+    "madeWith": "由端侧 AI 驱动"
+  },
+  "seo": {
+    "home": {
+      "title": "LumiPic — 免费、私密的浏览器图片工具",
+      "description": "端侧 AI 抠图、图片压缩、格式转换、精准裁剪。免费无需注册，照片永不离开你的浏览器。"
+    },
+    "remove-bg": {
+      "title": "在线抠图去背景 — 免费、私密、AI 驱动 | LumiPic",
+      "description": "影楼级发丝边缘，一键生成透明 PNG。端侧 AI 抠图，免费不限量，图片无需上传。"
+    },
+    "compress": {
+      "title": "在线图片压缩 — 私密且免费 | LumiPic",
+      "description": "浏览器内智能压缩 JPG、PNG、WebP、AVIF。不上传、不限量、无水印。"
+    },
+    "convert": {
+      "title": "图片格式转换 — HEIC 转 JPG、PNG 转 WebP | LumiPic",
+      "description": "PNG、JPG、WebP、AVIF 互转，支持 iPhone HEIC。免费、私密、纯浏览器完成。"
+    },
+    "crop": {
+      "title": "在线图片裁剪 — 免费私密 | LumiPic",
+      "description": "矩形框选、比例预设、旋转翻转，裁剪后保存为原格式。免费、私密、全程本地处理。"
+    },
+    "strip-exif": {
+      "title": "清除照片 EXIF 与 GPS 信息 — 无损 | LumiPic",
+      "description": "分享前无损清除照片的定位与相机元数据。免费、私密、浏览器内完成。"
+    }
+  }
+}

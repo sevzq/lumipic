@@ -1,0 +1,42 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>WebGPU check</title>
+<style>
+  body { font-family: -apple-system, sans-serif; background: #fff; color: #000; padding: 40px; }
+  .big { font-size: 64px; font-weight: 800; letter-spacing: -1px; }
+  .row { font-size: 22px; margin-top: 10px; font-variant-numeric: tabular-nums; }
+  .ok { color: #1ea64a; } .bad { color: #d33; }
+</style>
+</head>
+<body>
+<div id="out" class="big">checking…</div>
+<div id="rows"></div>
+<script>
+(async () => {
+  const out = document.getElementById("out");
+  const rows = document.getElementById("rows");
+  if (!navigator.gpu) { out.textContent = "NO WEBGPU"; out.className = "big bad"; return; }
+  const adapter = await navigator.gpu.requestAdapter();
+  if (!adapter) { out.textContent = "NO ADAPTER"; out.className = "big bad"; return; }
+  const n = adapter.limits.maxStorageBuffersPerShaderStage;
+  out.textContent = "maxStorageBuffersPerShaderStage = " + n;
+  out.className = "big " + (n >= 11 ? "ok" : "bad");
+  const info = adapter.info || {};
+  const lines = [
+    "verdict: " + (n >= 11 ? "1024 HD model OK" : "512 fallback (needs 11)"),
+    "vendor: " + (info.vendor || "?") + "  architecture: " + (info.architecture || "?"),
+    "device: " + (info.device || "-") + "  description: " + (info.description || "-"),
+    "userAgent: " + navigator.userAgent,
+  ];
+  for (const l of lines) {
+    const d = document.createElement("div");
+    d.className = "row";
+    d.textContent = l;
+    rows.appendChild(d);
+  }
+})();
+</script>
+</body>
+</html>

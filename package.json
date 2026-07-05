@@ -1,25 +1,51 @@
 {
-  "name": "lumipic-scaffold",
+  "name": "lumipic",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "next build --webpack",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "fetch:models": "bash scripts/fetch-models.sh",
+    "demos:studio": "remotion studio remotion/index.ts",
+    "demos:render": "bash scripts/render-demos.sh",
+    "postinstall": "node scripts/copy-ort.mjs"
   },
   "dependencies": {
+    "@fontsource-variable/inter": "^5.2.8",
+    "@gsap/react": "^2.1.2",
+    "@huggingface/transformers": "^4.2.0",
+    "@jsquash/avif": "^2.1.1",
+    "@jsquash/jpeg": "^1.6.0",
+    "@jsquash/oxipng": "^2.3.0",
+    "@jsquash/png": "^3.1.1",
+    "@jsquash/resize": "^2.1.1",
+    "@jsquash/webp": "^1.5.0",
+    "comlink": "^4.4.2",
+    "fflate": "^0.8.3",
+    "gsap": "^3.15.0",
+    "heic-decode": "^2.1.0",
+    "image-q": "^4.0.0",
+    "motion": "^12.42.2",
     "next": "16.2.10",
+    "next-intl": "^4.13.1",
     "react": "19.2.4",
-    "react-dom": "19.2.4"
+    "react-dom": "19.2.4",
+    "zustand": "^5.0.14"
   },
   "devDependencies": {
+    "@remotion/cli": "^4.0.484",
+    "@remotion/google-fonts": "^4.0.484",
+    "@remotion/media": "^4.0.484",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.2.10",
+    "remotion": "^4.0.484",
+    "sharp": "^0.35.3",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

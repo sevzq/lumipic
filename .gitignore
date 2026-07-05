@@ -24,6 +24,19 @@
 .DS_Store
 *.pem
 
+# self-hosted binaries fetched by scripts (see scripts/fetch-models.sh, scripts/copy-ort.mjs)
+/public/models/
+/public/ort/
+
+# research cache
+/.firecrawl/
+
+# local agent skills (not part of the app)
+/.agents/
+
+# local test fixtures
+/testimg*
+
 # debug
 npm-debug.log*
 yarn-debug.log*

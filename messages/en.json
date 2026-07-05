@@ -1,0 +1,187 @@
+{
+  "common": {
+    "appName": "LumiPic",
+    "tagline": "Every pixel stays on your device"
+  },
+  "hero": {
+    "titleA": "Image tools that ",
+    "titleB": "never upload",
+    "subtitle": "AI background removal, smart compression, format conversion and precise cropping — all inside your browser. Your photos never leave your device."
+  },
+  "tools": {
+    "remove-bg": {
+      "name": "Remove Background",
+      "desc": "On-device AI cuts hair-level edges into clean transparent PNGs."
+    },
+    "compress": {
+      "name": "Compress",
+      "desc": "Shrink JPG, PNG, WebP and AVIF dramatically with no visible loss."
+    },
+    "convert": {
+      "name": "Convert",
+      "desc": "PNG, JPG, WebP and AVIF in any direction — iPhone HEIC included."
+    },
+    "crop": {
+      "name": "Crop",
+      "desc": "Draw a rectangle, crop precisely with rotation support, keep the original format."
+    },
+    "strip-exif": {
+      "name": "Strip EXIF",
+      "desc": "Losslessly remove GPS and camera metadata. Zero quality loss."
+    }
+  },
+  "studio": {
+    "dropTitle": "Drop images here",
+    "dropOr": "or",
+    "browse": "browse files",
+    "pasteHint": "You can also paste from the clipboard (⌘V)",
+    "dropOverlay": "Release to add",
+    "supported": "JPG · PNG · WebP · AVIF · HEIC · GIF · BMP",
+    "limits": "Up to 60 files · 80 MB each",
+    "addMore": "Add more",
+    "clearAll": "Clear all",
+    "downloadAll": "Download all",
+    "downloadZip": "Download ZIP",
+    "startAll": "Process {count} image(s)",
+    "download": "Download",
+    "remove": "Remove",
+    "processing": "Processing…",
+    "processingCount": "Processing {done} of {total}",
+    "processingHint": "Hang tight — please keep this page open",
+    "queued": "Queued",
+    "done": "Done",
+    "failed": "Failed",
+    "saved": "saved",
+    "larger": "larger",
+    "compare": "Compare",
+    "before": "Before",
+    "after": "After",
+    "filesCount": "{count} images",
+    "doneCount": "{done} / {total} done",
+    "rejectedNote": "{count} file(s) skipped (unsupported format or over 80 MB)",
+    "errorGeneric": "This image failed to process",
+    "errorUnsupportedLossless": "Lossless stripping supports JPG, PNG and WebP only",
+    "errorEngine": "This device can't run the AI engine"
+  },
+  "settings": {
+    "quality": "Quality",
+    "strength": "Compression",
+    "format": "Output format",
+    "pngLossy": "Smart lossy PNG",
+    "pngLossyHint": "Palette quantization, TinyPNG-style"
+  },
+  "crop": {
+    "free": "Free",
+    "rotate": "Rotate",
+    "flip": "Flip",
+    "apply": "Crop",
+    "recrop": "Re-crop"
+  },
+  "engine": {
+    "loadingTitle": "Loading AI model",
+    "loadingDesc": "One-time download — cached forever, instant next time",
+    "ready": "On-device AI ready · WebGPU",
+    "tierHd": "1024 HD",
+    "tierLite": "512 Fast",
+    "tierLiteHint": "This browser's WebGPU can't run the 1024 model reliably, so we switched automatically — edge refinement still runs at full resolution",
+    "unavailableTitle": "This browser can't run the AI locally",
+    "unavailableDesc": "WebGPU not detected. Please use the latest Chrome, Edge or Safari."
+  },
+  "landing": {
+    "ctaPrimary": "Remove a background",
+    "ctaSecondary": "See what it can do",
+    "sections": {
+      "remove-bg": {
+        "eyebrow": "01 · Background removal",
+        "title": "Drop a photo, lose the background",
+        "desc": "The BiRefNet AI model runs right inside your browser. Hair, fur and translucent edges separate cleanly into a ready-to-use transparent PNG.",
+        "b1": "Hair-level edges with guided-filter refinement",
+        "b2": "WebGPU-accelerated — seconds per image",
+        "b3": "1024px HD model loads adaptively",
+        "cta": "Try background removal"
+      },
+      "compress": {
+        "eyebrow": "02 · Smart compression",
+        "title": "80% smaller, visually identical",
+        "desc": "MozJPEG, OxiPNG, WebP and AVIF encoders compiled to WASM run locally. Drag one slider to trade size against quality in real time.",
+        "b1": "JPG / PNG / WebP / AVIF supported",
+        "b2": "Batch dozens of images at once",
+        "b3": "Live preview of every byte saved",
+        "cta": "Try compression"
+      },
+      "convert": {
+        "eyebrow": "03 · Format conversion",
+        "title": "HEIC to AVIF in one step",
+        "desc": "iPhone HEIC shots, ancient BMPs — convert them all to modern web-friendly formats with dimensions and colors intact.",
+        "b1": "Reads HEIC / GIF / BMP",
+        "b2": "Writes PNG / JPG / WebP / AVIF",
+        "b3": "Adjustable quality — convert and compress in one go",
+        "cta": "Try conversion"
+      },
+      "crop": {
+        "eyebrow": "04 · Precise cropping",
+        "title": "Crop exactly what you frame",
+        "desc": "Freeform marquee or aspect-ratio presets, with rotate and flip. The original format is preserved — PNG in, PNG out.",
+        "b1": "Freeform + ratio presets",
+        "b2": "Rotate / flip to fix orientation",
+        "b3": "Keeps original format and quality",
+        "cta": "Try cropping"
+      },
+      "strip-exif": {
+        "eyebrow": "05 · EXIF removal",
+        "title": "Share the photo, not your location",
+        "desc": "GPS coordinates, timestamps, device model — wipe every bit of metadata in one click, leaving only the picture itself.",
+        "b1": "Strips GPS / time / device info",
+        "b2": "Zero quality loss",
+        "b3": "Batch cleaning supported",
+        "cta": "Try EXIF removal"
+      }
+    },
+    "privacy": {
+      "eyebrow": "Why LumiPic",
+      "title": "Your photos never leave your device",
+      "desc": "No uploads, no servers, no accounts. Every computation happens in your own browser — that's not a promise, it's the architecture.",
+      "s1": "0",
+      "s1l": "uploads — images never touch a server",
+      "s2": "100%",
+      "s2l": "on-device — works offline too",
+      "s3": "$0",
+      "s3l": "free forever, no watermarks, no limits"
+    },
+    "final": {
+      "title": "Drag an image in and see",
+      "sub": "Free, no sign-up, no watermark. It just works.",
+      "cta": "Get started"
+    }
+  },
+  "footer": {
+    "privacy": "Your images never leave your device.",
+    "madeWith": "Powered by on-device AI"
+  },
+  "seo": {
+    "home": {
+      "title": "LumiPic — Free, private image tools in your browser",
+      "description": "On-device AI background removal, image compression, format conversion and cropping. Free, no sign-up, and your photos never leave your browser."
+    },
+    "remove-bg": {
+      "title": "Remove Image Background Online — free, private, AI | LumiPic",
+      "description": "Studio-grade hair edges, one-click transparent PNGs. On-device AI, free and unlimited — no uploads."
+    },
+    "compress": {
+      "title": "Compress Images Online — private & free | LumiPic",
+      "description": "Smart in-browser compression for JPG, PNG, WebP and AVIF. No uploads, no limits, no watermarks."
+    },
+    "convert": {
+      "title": "Convert Image Formats — HEIC to JPG, PNG to WebP | LumiPic",
+      "description": "Convert between PNG, JPG, WebP and AVIF, including iPhone HEIC. Free, private, fully in-browser."
+    },
+    "crop": {
+      "title": "Crop Images Online — free & private | LumiPic",
+      "description": "Crop images with aspect presets and rotation, saved in the original format. Free, private, fully in-browser."
+    },
+    "strip-exif": {
+      "title": "Remove EXIF & GPS Data from Photos — lossless | LumiPic",
+      "description": "Losslessly strip location and camera metadata before sharing. Free, private, in your browser."
+    }
+  }
+}

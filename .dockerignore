@@ -1,0 +1,11 @@
+node_modules
+.next
+.git
+.firecrawl
+.agents
+assets
+remotion
+public/models
+public/ort
+*.log
+.env*
