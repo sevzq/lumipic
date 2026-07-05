@@ -21,11 +21,12 @@
   const adapter = await navigator.gpu.requestAdapter();
   if (!adapter) { out.textContent = "NO ADAPTER"; out.className = "big bad"; return; }
   const n = adapter.limits.maxStorageBuffersPerShaderStage;
-  out.textContent = "maxStorageBuffersPerShaderStage = " + n;
-  out.className = "big " + (n >= 11 ? "ok" : "bad");
+  out.textContent = "WEBGPU OK";
+  out.className = "big ok";
   const info = adapter.info || {};
   const lines = [
-    "verdict: " + (n >= 11 ? "1024 HD model OK" : "512 fallback (needs 11)"),
+    "verdict: this browser runs the on-device AI (512 model needs 7 storage buffers)",
+    "maxStorageBuffersPerShaderStage: " + n,
     "vendor: " + (info.vendor || "?") + "  architecture: " + (info.architecture || "?"),
     "device: " + (info.device || "-") + "  description: " + (info.description || "-"),
     "userAgent: " + navigator.userAgent,

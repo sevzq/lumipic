@@ -81,9 +81,7 @@
     "loadingTitle": "正在加载 AI 模型",
     "loadingDesc": "首次使用需下载模型，之后永久缓存、下次秒开",
     "ready": "端侧 AI 就绪 · WebGPU",
-    "tierHd": "1024 高清版",
-    "tierLite": "512 快速版",
-    "tierLiteHint": "此浏览器的 WebGPU 无法稳定运行 1024 版，已自动切换。边缘精修仍按原图分辨率处理",
+    "engineBadge": "BiRefNet · 原图分辨率精修",
     "unavailableTitle": "当前浏览器无法本地运行 AI",
     "unavailableDesc": "未检测到 WebGPU。请使用最新版 Chrome、Edge 或 Safari。"
   },
@@ -97,7 +95,7 @@
         "desc": "BiRefNet 端侧 AI 模型直接在你的浏览器里运行。发丝、绒毛、半透明边缘都能干净分离，输出即用的透明 PNG。",
         "b1": "发丝级边缘，导向滤波精修",
         "b2": "WebGPU 加速，一张图只要几秒",
-        "b3": "1024 高清模型自适应加载",
+        "b3": "模型首次加载后永久缓存，下次秒开",
         "cta": "试试抠图"
       },
       "compress": {

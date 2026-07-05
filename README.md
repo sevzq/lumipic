@@ -93,34 +93,26 @@ drop image ──▶ Web Worker (comlink RPC)
               transparent PNG / optimized file — straight back to your disk
 ```
 
-### Adaptive HD / Fast tiers
+### Why the 512 model (and not 1024)
 
-Two BiRefNet_lite graphs ship with the app, picked at runtime:
-
-| Tier | Input | Needs | Status today |
-| --- | --- | --- | --- |
-| **1024 HD** | 1024 px | `maxStorageBuffersPerShaderStage ≥ 11` **and** enough WASM headroom | aspirational — see below |
-| **512 Fast** | 512 px | any WebGPU adapter | what everyone actually gets |
-
-The 1024 graph currently hits **two** independent walls in browsers:
+The app ships a single BiRefNet_lite graph: the **512px re-export** (max 7 storage
+buffers), which runs on every WebGPU adapter. The 1024px graph was investigated in
+depth and is blocked in browsers by two independent walls — **on every OS**:
 
 1. **Storage-buffer limit** — the graph contains giant `Concat` (up to 1024 inputs)
-   and `Split` (32 outputs) nodes; one shader needs 11 storage buffers, and Chrome's
-   Metal backend exposes only 10. `scripts/patch-onnx-webgpu.py` rewrites those nodes
-   into trees of ≤ 8 (verified bit-exact against the original), which clears this wall.
+   and `Split` (32 outputs) nodes; one shader needs 11 storage buffers, and macOS
+   Metal exposes only 10. Fixable via graph surgery (`scripts/patch-onnx-webgpu.py`
+   rewrites those nodes into trees of ≤ 8, verified bit-exact) — but then:
 2. **WASM memory wall** — the model's deformable-conv sampling ops
-   (`ScatterND` / `GatherND`) aren't implemented in onnxruntime's WebGPU EP yet, so
-   they bridge back to CPU WASM. At 1024² those intermediates exhaust the 32-bit WASM
-   heap (`std::bad_alloc`) — even in Safari, whose adapter reports 44 storage buffers.
-   512² fits fine.
+   (`ScatterND` / `GatherND`) aren't implemented in onnxruntime's WebGPU EP, so they
+   bridge back to CPU WASM. At 1024² those intermediates exhaust the 32-bit WASM heap
+   (`std::bad_alloc`) regardless of platform — reproduced even in Safari, whose
+   adapter reports 44 storage buffers. 512² fits comfortably.
 
-So until onnxruntime-web gains WebGPU kernels for those ops, every browser runs the
-512 tier. In practice the gap is small: the guided-filter refinement always runs at
-the **original** resolution, so edge quality stays high. If a 1024 attempt fails at
-inference time, the worker disposes it and retries on 512 automatically. Open
-`/gpu-check.html` on the deployed site to inspect your adapter. (Native runtimes have
-no such caps — the same 1024 graph runs in ~3 s on an M-series CPU via
-onnxruntime-node, which is the route a future desktop build would take.)
+In practice the quality gap is small anyway: the guided-filter refinement always runs
+at the **original** resolution, so hair-level edges survive either way (an A/B of
+512 vs 1024 through the same pipeline showed only marginal differences). Open
+`/gpu-check.html` on the deployed site to inspect your adapter.
 
 ### Stack
 
@@ -135,7 +127,7 @@ onnxruntime-node, which is the route a future desktop build would take.)
 
 ```bash
 pnpm install            # also copies the ONNX runtime into public/ort
-pnpm fetch:models       # one-time ~200 MB model download into public/models
+pnpm fetch:models       # one-time ~95 MB model download into public/models
 pnpm dev
 ```
 

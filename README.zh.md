@@ -90,32 +90,25 @@ LumiPic 从**架构上**就做不了这些事：
            透明 PNG / 优化后的文件 —— 直接回到你的磁盘
 ```
 
-### 自适应 HD / Fast 双档位
+### 为什么用 512 模型（而不是 1024）
 
-应用内置两份 BiRefNet_lite 计算图，运行时自动选择：
-
-| 档位 | 输入 | 要求 | 现状 |
-| --- | --- | --- | --- |
-| **1024 HD** | 1024 px | `maxStorageBuffersPerShaderStage ≥ 11` **且** WASM 内存充足 | 期货 —— 见下文 |
-| **512 Fast** | 512 px | 任何 WebGPU 适配器 | 所有人的实际档位 |
-
-1024 计算图目前在浏览器里会撞上**两堵**互相独立的墙：
+应用只内置一份 BiRefNet_lite 计算图：**512px 重导出版**（最多 7 个 storage
+buffer），能在所有 WebGPU 适配器上运行。1024px 版经过完整调查，在浏览器里会
+撞上两堵互相独立的墙——**且与操作系统无关**：
 
 1. **Storage buffer 上限** —— 图中含有巨型 `Concat`（最多 1024 个输入）和
-   `Split`（32 个输出）节点，某个着色器需要 11 个 storage buffer，而 Chrome 的
-   Metal 后端只暴露 10 个。`scripts/patch-onnx-webgpu.py` 可以把这些节点重写成
-   ≤ 8 的树状结构（已验证与原模型逐像素一致），能解决这堵墙。
+   `Split`（32 个输出）节点，某个着色器需要 11 个 storage buffer，而 macOS
+   Metal 只暴露 10 个。这一堵可以用图手术解决（`scripts/patch-onnx-webgpu.py`
+   把这些节点重写成 ≤ 8 的树状结构，已验证与原模型逐像素一致），但接着是：
 2. **WASM 内存墙** —— 模型的可变形卷积采样算子（`ScatterND` / `GatherND`）
-   在 onnxruntime 的 WebGPU 后端里还没有实现，会桥接回 CPU WASM 执行。
-   1024² 分辨率下这些中间张量会耗尽 32 位 WASM 堆（`std::bad_alloc`）——
-   即使在适配器报告 44 个 storage buffer 的 Safari 里也一样。512² 则没问题。
+   在 onnxruntime 的 WebGPU 后端里没有实现，会桥接回 CPU WASM 执行。
+   1024² 分辨率下这些中间张量会耗尽 32 位 WASM 堆（`std::bad_alloc`），
+   任何平台都一样——即使在适配器报告 44 个 storage buffer 的 Safari 里也复现。
+   512² 则绰绰有余。
 
-所以在 onnxruntime-web 为这些算子补齐 WebGPU kernel 之前，所有浏览器实际运行的
-都是 512 档。好在差距不大：导向滤波精修始终在**原始分辨率**运行，最终边缘质量
-依然很高。如果 1024 尝试在推理时失败，worker 会自动释放并降级到 512 重试。
-访问部署站点的 `/gpu-check.html` 可查看你的适配器参数。（原生运行时没有这些
-限制 —— 同一份 1024 模型在 M 系列 CPU 上经 onnxruntime-node 约 3 秒完成推理，
-这正是未来桌面版会走的路线。）
+实际观感差距本来就很小：导向滤波精修始终在**原始分辨率**运行，发丝级边缘
+两个档位都能保住（同一管线下 512 与 1024 的 A/B 对比只有边缘光晕的细微差异）。
+访问部署站点的 `/gpu-check.html` 可查看你的适配器参数。
 
 ### 技术栈
 
@@ -130,7 +123,7 @@ LumiPic 从**架构上**就做不了这些事：
 
 ```bash
 pnpm install            # 同时把 ONNX 运行时复制到 public/ort
-pnpm fetch:models       # 一次性下载约 200 MB 模型到 public/models
+pnpm fetch:models       # 一次性下载约 95 MB 模型到 public/models
 pnpm dev
 ```
 

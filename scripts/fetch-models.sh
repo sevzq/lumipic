@@ -1,11 +1,12 @@
 #!/usr/bin/env bash
-# Downloads the self-hosted AI models into public/models/.
+# Downloads the self-hosted AI model into public/models/.
 # Run once locally (pnpm fetch:models) and during Docker build.
 #
-# Two variants of BiRefNet_lite (MIT) are shipped; the worker picks one at
-# runtime based on the WebGPU adapter's maxStorageBuffersPerShaderStage:
-#   - 1024px graph: best quality, needs limit >= 11 (Chrome 146+)
-#   - 512px graph:  max 7 buffers, runs on every WebGPU adapter
+# BiRefNet_lite 512px re-export (MIT, max 7 storage buffers): the only
+# variant that runs on every WebGPU adapter. The 1024px graph is blocked in
+# browsers on all platforms by a WASM memory wall (ScatterND/GatherND CPU
+# fallback OOMs the 32-bit heap) — see scripts/patch-onnx-webgpu.py and the
+# README's "Why 512" section for the full investigation.
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)/public/models"
@@ -25,7 +26,6 @@ fetch_repo() {
   fetch "$base/onnx/model_fp16.onnx" "$dest/onnx/model_fp16.onnx"
 }
 
-fetch_repo "onnx-community/BiRefNet_lite" "BiRefNet_lite"
 fetch_repo "studioludens/birefnet-lite-512" "BiRefNet_lite_512"
 
 echo "Models ready in $ROOT"

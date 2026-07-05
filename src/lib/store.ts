@@ -176,7 +176,6 @@ export const useStudio = create<StudioState>((set, get) => {
           progress: 1,
           result: { ...result, url: URL.createObjectURL(result.blob) },
         });
-        if (mode === "remove-bg") void syncTier();
       } catch (err) {
         if (epoch !== jobEpoch) return;
         const message = err instanceof Error ? err.message : String(err);
@@ -187,19 +186,6 @@ export const useStudio = create<StudioState>((set, get) => {
         console.error("[lumipic] process failed:", err);
       }
     });
-  };
-
-  /** The worker may downgrade 1024 -> 512 mid-run; reflect it in the UI. */
-  const syncTier = async () => {
-    try {
-      const tier = await getBgWorker().currentTier();
-      const engine = get().engine;
-      if (engine.kind === "ready" && engine.tier !== tier) {
-        set({ engine: { ...engine, tier } });
-      }
-    } catch {
-      /* cosmetic only */
-    }
   };
 
   let reprocessTimer: ReturnType<typeof setTimeout> | null = null;
@@ -356,7 +342,7 @@ export const useStudio = create<StudioState>((set, get) => {
         set({
           engine:
             res.device === "webgpu"
-              ? { kind: "ready", device: "webgpu", tier: res.tier ?? "lite" }
+              ? { kind: "ready", device: "webgpu" }
               : { kind: "unavailable", reason: res.reason ?? "no-webgpu" },
         });
       } catch (err) {

@@ -14,7 +14,7 @@ export function EngineBanner() {
     <AnimatePresence mode="wait">
       {engine.kind === "ready" && (
         <motion.div
-          key={`ready-${engine.tier}`}
+          key="ready"
           initial={{ opacity: 0, y: -8 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0 }}
@@ -23,16 +23,9 @@ export function EngineBanner() {
         >
           <ZapIcon size={13} className="text-success" />
           {t("ready")}
-          <span
-            className={`rounded-full px-2 py-0.5 text-[11px] font-semibold text-black ${
-              engine.tier === "hd" ? "bg-block-lime" : "bg-block-cream"
-            }`}
-          >
-            {engine.tier === "hd" ? t("tierHd") : t("tierLite")}
+          <span className="rounded-full bg-block-lime px-2 py-0.5 text-[11px] font-semibold text-black">
+            {t("engineBadge")}
           </span>
-          {engine.tier === "lite" && (
-            <span className="text-[11.5px] text-black/45">{t("tierLiteHint")}</span>
-          )}
         </motion.div>
       )}
 

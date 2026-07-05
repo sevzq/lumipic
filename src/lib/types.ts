@@ -63,13 +63,10 @@ export interface StudioFile {
   crop: CropParams | null;
 }
 
-/** Which BiRefNet variant is active: hd = 1024px, lite = 512px fallback. */
-export type BgTier = "hd" | "lite";
-
 export type BgEngineState =
   | { kind: "idle" }
   | { kind: "loading"; progress: number }
-  | { kind: "ready"; device: "webgpu" | "wasm"; tier: BgTier }
+  | { kind: "ready"; device: "webgpu" | "wasm" }
   | { kind: "unavailable"; reason: string };
 
 export interface PipelineJob {

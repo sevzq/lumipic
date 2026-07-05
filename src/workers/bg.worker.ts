@@ -6,18 +6,24 @@
  * transformers.js + WebGPU. The model is self-hosted under /models/ and the
  * ONNX runtime under /ort/ — no third-party CDN, no uploads.
  *
- * Pipeline: model mask (1024px) -> guided-filter refinement at the original
+ * Pipeline: model mask (512px) -> guided-filter refinement at the original
  * resolution (recovers hair / fine edges) -> RGBA output.
+ *
+ * Why 512 and not 1024: the 1024 graph is blocked in browsers by two
+ * independent walls — a >10 storage-buffer shader that macOS Metal rejects,
+ * and (on every OS) ScatterND/GatherND ops that fall back to CPU WASM and
+ * exhaust the 32-bit heap at 1024² (std::bad_alloc, reproduced even in
+ * Safari with a 44-buffer adapter). The 512 re-export (max 7 buffers) runs
+ * on every WebGPU adapter, and the full-resolution guided filter closes
+ * most of the visual gap.
  */
 import { expose, transfer } from "comlink";
 import { refineAlpha } from "@/lib/guided-filter";
 
 export type BgDevice = "webgpu" | "unavailable";
-export type BgTier = "hd" | "lite";
 
 export interface BgInitResult {
   device: BgDevice;
-  tier?: BgTier;
   reason?: string;
 }
 
@@ -26,32 +32,15 @@ type Segmenter = (input: unknown) => Promise<unknown>;
 let segmenterPromise: Promise<Segmenter> | null = null;
 let device: BgDevice = "unavailable";
 
-/**
- * BiRefNet_lite's 1024px graph needs 11 storage buffers per shader stage;
- * adapters capped at 10 (e.g. Dawn/Metal before Chrome 146) reject it. For
- * those we load the 512px re-export (max 7 buffers, works everywhere). The
- * guided-filter refinement afterwards runs at the original resolution either
- * way, so edge quality stays high.
- */
-const MODEL_FULL = "BiRefNet_lite";
-const MODEL_SAFE = "BiRefNet_lite_512";
-let modelId = MODEL_FULL;
-
-interface GpuAdapterLike {
-  limits?: { maxStorageBuffersPerShaderStage?: number };
-}
+const MODEL_ID = "BiRefNet_lite_512";
 
 async function detectWebGpu(): Promise<boolean> {
   try {
     const nav = navigator as Navigator & {
-      gpu?: { requestAdapter(): Promise<GpuAdapterLike | null> };
+      gpu?: { requestAdapter(): Promise<unknown | null> };
     };
     if (!nav.gpu) return false;
-    const adapter = await nav.gpu.requestAdapter();
-    if (!adapter) return false;
-    const maxStorage = adapter.limits?.maxStorageBuffersPerShaderStage ?? 8;
-    modelId = maxStorage >= 11 ? MODEL_FULL : MODEL_SAFE;
-    return true;
+    return (await nav.gpu.requestAdapter()) !== null;
   } catch {
     return false;
   }
@@ -70,7 +59,7 @@ async function createSegmenter(
     env.backends.onnx.wasm.wasmPaths = "/ort/";
   }
 
-  const segmenter = (await pipeline("background-removal", modelId, {
+  const segmenter = (await pipeline("background-removal", MODEL_ID, {
     device: "webgpu",
     dtype: "fp16",
     progress_callback: (info: {
@@ -101,12 +90,7 @@ const api = {
     await segmenterPromise;
     device = "webgpu";
     onProgress(1);
-    return { device, tier: modelId === MODEL_FULL ? "hd" : "lite" };
-  },
-
-  /** The tier can downgrade at runtime (storage-buffer fallback). */
-  currentTier(): BgTier {
-    return modelId === MODEL_FULL ? "hd" : "lite";
+    return { device };
   },
 
   /**
@@ -123,32 +107,7 @@ const api = {
     const { RawImage } = await import("@huggingface/transformers");
     const input = new RawImage(new Uint8ClampedArray(data), width, height, 4);
 
-    // Adapters that pass the storage-buffer check can still fail on the
-    // 1024px graph — e.g. Safari throws `std::bad_alloc` (OOM) at inference
-    // time. Any such failure downgrades to the 512px model once and retries.
-    const recoverable =
-      /storage buffers?|bad_alloc|out of memory|allocation failed|ERROR_CODE: 6/i;
-
-    let result: unknown;
-    try {
-      result = await segmenter(input);
-    } catch (err) {
-      if (modelId !== MODEL_SAFE && recoverable.test(String(err))) {
-        modelId = MODEL_SAFE;
-        // Free the failed pipeline's GPU/WASM memory before loading the
-        // smaller model — critical on Safari where we just hit OOM.
-        try {
-          await (segmenter as { dispose?: () => Promise<void> }).dispose?.();
-        } catch {
-          /* best-effort */
-        }
-        segmenterPromise = createSegmenter(() => {});
-        const safe = await segmenterPromise;
-        result = await safe(input);
-      } else {
-        throw err;
-      }
-    }
+    const result = await segmenter(input);
     const out = (Array.isArray(result) ? result[0] : result) as {
       data: Uint8ClampedArray | Uint8Array;
       width: number;

@@ -81,9 +81,7 @@
     "loadingTitle": "Loading AI model",
     "loadingDesc": "One-time download — cached forever, instant next time",
     "ready": "On-device AI ready · WebGPU",
-    "tierHd": "1024 HD",
-    "tierLite": "512 Fast",
-    "tierLiteHint": "This browser's WebGPU can't run the 1024 model reliably, so we switched automatically — edge refinement still runs at full resolution",
+    "engineBadge": "BiRefNet · full-res edge refine",
     "unavailableTitle": "This browser can't run the AI locally",
     "unavailableDesc": "WebGPU not detected. Please use the latest Chrome, Edge or Safari."
   },
@@ -97,7 +95,7 @@
         "desc": "The BiRefNet AI model runs right inside your browser. Hair, fur and translucent edges separate cleanly into a ready-to-use transparent PNG.",
         "b1": "Hair-level edges with guided-filter refinement",
         "b2": "WebGPU-accelerated — seconds per image",
-        "b3": "1024px HD model loads adaptively",
+        "b3": "Model cached after first load — instant next time",
         "cta": "Try background removal"
       },
       "compress": {
